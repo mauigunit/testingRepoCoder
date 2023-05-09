@@ -1,0 +1,84 @@
+  <div class="row justify-content-center">
+    <div class="col-5">
+      <h1>Registrarme</h1>
+      <br /><br />
+      <form role="form" autocomplete="off">
+        <div class="form-group">
+          <label for="lastname">Nombre:</label>
+          <input type="text" class="form-control" id="firstname" name="firstname">
+        </div>
+        <div class="form-group">
+          <label for="lastname">Apellido:</label>
+          <input type="text" class="form-control" id="lastname" name="lastname">
+        </div>
+        <div class="form-group">
+          <label for="email">Email:</label>
+          <input type="email" class="form-control" id="email" name="email">
+        </div>
+        <div class="form-group">
+          <label for="age">Edad:</label>
+          <input type="text" class="form-control" id="age" name="age">
+        </div>
+        <div class="form-group">
+          <label for="password">Password:</label>
+          <input type="password" class="form-control" id="password" name="password">
+        </div>
+        <!--<div class="form-group">
+          <label for="role">Perfil:</label>
+          <select id="role" class="form-control">
+            <option value="admin">Administrador</option>
+            <option value="user">usuario</option>
+          </select>
+        </div>-->
+      </form>
+      <button type="button" id="btn-register" class="btn btn-primary">Registrarme</button>
+      <br /><br />
+      <a href="/login">Ir a Login</a>
+    </div>
+  </div>
+<script>
+  function registrarme() {
+    let firstname = document.getElementById('firstname').value;
+    let lastname = document.getElementById('lastname').value;
+    let email = document.getElementById('email').value;
+    let age = document.getElementById('age').value;
+    let password = document.getElementById('password').value;
+    //let role = document.getElementById('role').value;
+    fetch('/registrar', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ first_name:firstname, last_name:lastname, email, age, password })
+    })
+      .then(response => response.text())
+      .then(data => {
+        let response = JSON.parse(data);
+        if(response.status == "success"){
+          Swal.fire({
+            icon: 'success',
+            title: response.status,
+            text: response.message,
+            footer: '<a href="/login">Ir a Login</a>'
+          })
+        }
+        else {
+          Swal.fire({
+            icon: 'error',
+            title: response.status,
+            text: response.message,
+            footer: '<a href="/login">Ir a Login</a>'
+          })
+        }
+      })
+      .catch(error => {
+        console.log(error)
+        Swal.fire({
+          icon: 'error',
+          title: 'error',
+          text: error,
+          footer: '<a href="/login">Ir a Login</a>'
+        })
+      })
+  }
+
+  document.getElementById("btn-register").addEventListener("click", registrarme);
+</script>

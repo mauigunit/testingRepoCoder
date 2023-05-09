@@ -1,0 +1,84 @@
+<h3>Datos de usuario</h3>
+
+<p>
+    <b>Usuario:</b> {{session.usuario}}<br />
+    <b>Email:</b> {{session.email}}<br />
+    <b>Perfil:</b> {{session.rol}}<br />
+    <a href="/cerrarSesion"> Cerrar Sesión</a>
+</p>
+<br />
+<h1>Lista de productos</h1>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>Producto</th>
+            <th>Precio</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each productos.payload}}
+        <tr>
+            <td>{{title}}</td>
+            <td>${{price}}</td>
+            <td><button class="btn btn-primary btn-sm" onclick="getDetailsProducts('/api/products/{{_id}}')"><i class="bi bi-search"></i> Ver</button>
+             <button class="btn btn-success btn-sm" onclick="addProductCart('/api/products/{{_id}}')"><i class="bi bi-plus"></i> Al Carrito</button></td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+<br /><br />
+<div class="row">
+    <div class="col-5">
+        <a href="{{productos.prevLink}}" class="btn btn-danger btn-sm"><i class="bi bi-arrow-left"></i> Volver</a>
+    </div>
+    <div class="col-2">
+        <p>Page {{productos.page}} de {{productos.totalPages}}</p>
+    </div>
+    <div class="col-5" style="text-align: right;">
+        <a href="{{productos.nextLink}}"  class="btn btn-danger btn-sm">Siguiente <i class="bi bi-arrow-right"></i></a>
+    </div>
+</div>
+<script>
+    function getDetailsProducts(url) {
+        fetch(url, {
+            method: 'GET',
+            headers: { 'content-type': 'application/json' }
+        })
+            .then(response => response.text())
+            .then(data => {
+                let json = JSON.parse(data);
+                let html = "<div class='container-fluid'><h2>Detalle Producto</h2><br /><br /><table class='table table-sm table-bordered'>";
+                html += "<tr><td>Producto</td><td>" + json.payload.title + "</td></tr>"
+                html += "<tr><td>Descripción</td><td>" + json.payload.description + "</td></tr>"
+                html += "<tr><td>Código</td><td>" + json.payload.code + "</td></tr>"
+                html += "<tr><td>Precio</td><td>$ " + json.payload.price + "</td></tr>"
+                html += "<tr><td>Estado</td><td>" + json.payload.status + "</td></tr>"
+                html += "<tr><td>Stock</td><td>" + json.payload.stock + "</td></tr>"
+                html += "<tr><td>Categoria</td><td>" + json.payload.category + "</td></tr>"
+                html += "</table></div>"
+                Swal.fire({
+                    icon: 'info',
+                    html: html,
+                    footer: '<a href="#">Agregar al Carrito</a>'
+                })
+            })
+            .catch(error => {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error al buscar detalle',
+                    text: error,
+                })
+            })
+    }
+
+    function renderPage(url) {
+        fetch(url, {
+            method: 'GET',
+            headers: { 'content-type': 'application/json' }
+        })
+            .then(response => response.text())
+            .then(responseText => console.log(responseText))
+            .catch(error => console.log(error))
+    }
+</script>

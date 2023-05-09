@@ -1,0 +1,94 @@
+<br /><br />
+<div class="row justify-content-center">
+  <div class="col-6">
+    <h1>Iniciar Sesión</h1>
+    <br /><br />
+    <form id="frmLogin" role="form" autocomplete="off">
+      <div class="form-group">
+        <label for="email">Email:</label>
+        <input type="email" class="form-control" id="email" name="email">
+      </div>
+      <div class="form-group">
+        <label for="password">Password:</label>
+        <input type="password" class="form-control" id="password" name="password">
+      </div>
+      <div class="form-group">
+        <input type="submit" class="btn btn-primary" value="Iniciar Sesión">
+      </div>
+    </form>
+    <div class="row">
+      <!--<div class="col-lg-6">
+        <button type="button" id="btn-iniciar" class="btn btn-primary"><i class="bi bi-box-arrow-in-right"></i> Iniciar
+          Sesión</button>
+      </div>-->
+      <div class="col-lg-6">
+        <a class="btn btn-primary" href="/loginGithub/github"><i class="bi bi-github"></i> Iniciar con Github</a>
+      </div>
+      <br /><br /><br /><br />
+      <div class="col-lg-12">
+        <a href="/registrar">Ir a Registrarme</a>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+<script>
+  const formLogin = document.getElementById("frmLogin");
+  formLogin.addEventListener('submit', async e => {
+    e.preventDefault();
+    const datos = {
+      email:formLogin[0].value,
+      password:formLogin[1].value
+    }
+    const respuesta = await fetch('/login', {
+      method:'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(datos)
+    });
+     const content = await respuesta.json();
+      const { status, accessToken, link, message } = content;
+      if(status === "success") {
+        window.location.href = link;
+      } else {
+        Swal.fire({
+            icon: 'error',
+            title: status,
+            text: message
+          })
+      }
+  })
+
+  /*function iniciarSesion() {
+    let email = document.getElementById('email').value;
+    let password = document.getElementById('password').value;
+    fetch('/login', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ email, password })
+    })
+      .then(response => response.json())
+      .then(json => {
+        if (json.status == "success") {
+          window.location.href = json.link;
+        }
+        else {
+          Swal.fire({
+            icon: 'error',
+            title: response.status,
+            text: response.message
+          })
+        }
+      })
+      .catch(error => {
+        Swal.fire({
+          icon: 'error',
+          title: 'error',
+          text: error
+        })
+      })
+  }
+  document.getElementById("btn-iniciar").addEventListener("click", iniciarSesion);*/
+</script>

@@ -1,0 +1,19 @@
+<h1>Productos Carrito</h1>
+<h3>Identificador carrito: {{objCart.id}}</h3>
+<a href="/cerrarSesion"> Cerrar Sesión</a>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>Producto</th>
+            <th>Precio</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each objCart.products}}
+        <tr>
+            <td>{{product.title}}</td>
+            <td>${{product.price}}</td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>

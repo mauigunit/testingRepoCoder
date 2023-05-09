@@ -1,0 +1,24 @@
+
+<div class="container">
+    <h1>Lista de productos</h1>
+    </br>
+    </br>
+    <div class="row">
+        {{#each products}}
+            <div class="col-2">
+                <div class="alert alert-info">
+                    <p>Product: {{title}}
+                </div>
+            </div>
+            <div class="col-10">
+                <div class="alert alert-success">
+                    <ul>
+                        <li>description: {{description}}</li>
+                        <li>price: {{price}}</li>
+                        <li>stock: {{stock}}</li>
+                    </ul>
+                </div>
+            </div>
+        {{/each}}
+    </div>
+</div>
